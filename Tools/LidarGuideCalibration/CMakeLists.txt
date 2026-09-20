@@ -1,0 +1,17 @@
+add_executable(lidar_guide_calibration src/LidarGuideCalibration.cpp)
+target_link_libraries(lidar_guide_calibration PRIVATE Eigen3::Eigen ${OpenCV_LIBS})
+
+add_executable(lidar_guide_calibration_gen src/GenerateGuideTestData.cpp)
+target_link_libraries(lidar_guide_calibration_gen PRIVATE Eigen3::Eigen ${OpenCV_LIBS})
+
+add_executable(lidar_guide_encoder_monitor src/GimbalEncoderMonitor.cpp)
+target_link_libraries(lidar_guide_encoder_monitor PUBLIC Serial Core)
+
+add_executable(lidar_guide_point_to_angle src/LidarGuidePointToAngle.cpp)
+target_link_libraries(lidar_guide_point_to_angle PRIVATE GimbalController Core ${OpenCV_LIBS})
+
+add_executable(lidar_guide_point_to_angle_rotation src/LidarGuidePointToAngle_rotation.cpp)
+target_link_libraries(lidar_guide_point_to_angle_rotation PRIVATE GimbalController Core ${OpenCV_LIBS})
+
+add_executable(lidar_guide_point_to_angle_eular src/LidarGuidePointToAngle_eular.cpp)
+target_link_libraries(lidar_guide_point_to_angle_eular PRIVATE GimbalController Core ${OpenCV_LIBS})

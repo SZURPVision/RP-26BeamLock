@@ -1,0 +1,151 @@
+{
+  "configById": {
+    "Plot!1u027tz": {
+      "paths": [
+        {
+          "timestampMethod": "receiveTime",
+          "value": "/gimbal/current_rotation.pitch",
+          "enabled": true,
+          "color": "#f5774d",
+          "id": "c5fe7a96-b3ba-4ee0-82be-6a431d783600"
+        },
+        {
+          "timestampMethod": "receiveTime",
+          "value": "/gimbal/target_rotation.pitch",
+          "enabled": true,
+          "color": "#5cd6a9",
+          "id": "b174d276-515f-411f-9b9e-b343c8b3a857"
+        },
+        {
+          "timestampMethod": "receiveTime",
+          "value": "/gimbal/real_rotation.pitch",
+          "enabled": true,
+          "color": "#f7df71",
+          "id": "66da5c6d-b6bc-459d-94c3-66abb3bd2b20"
+        }
+      ],
+      "showXAxisLabels": true,
+      "showYAxisLabels": true,
+      "showLegend": false,
+      "legendDisplay": "floating",
+      "showPlotValuesInLegend": false,
+      "isSynced": true,
+      "xAxisVal": "timestamp",
+      "sidebarDimension": 240,
+      "foxglovePanelTitle": "pitch",
+      "timeWindowMode": "sliding",
+      "playbackBarPosition": "right",
+      "followingViewWidth": 5
+    },
+    "Plot!3zwepjy": {
+      "paths": [
+        {
+          "timestampMethod": "receiveTime",
+          "value": "/gimbal/current_rotation.yaw",
+          "enabled": true,
+          "color": "#f5774d",
+          "id": "c5fe7a96-b3ba-4ee0-82be-6a431d783600"
+        },
+        {
+          "timestampMethod": "receiveTime",
+          "value": "/gimbal/target_rotation.yaw",
+          "enabled": true,
+          "color": "#5cd6a9",
+          "id": "b174d276-515f-411f-9b9e-b343c8b3a857"
+        },
+        {
+          "timestampMethod": "receiveTime",
+          "value": "/gimbal/real_rotation.yaw",
+          "enabled": true,
+          "color": "#f7df71",
+          "id": "351b43ea-560a-4973-998b-e40c0fa4ec23"
+        }
+      ],
+      "showXAxisLabels": true,
+      "showYAxisLabels": true,
+      "showLegend": false,
+      "legendDisplay": "floating",
+      "showPlotValuesInLegend": false,
+      "isSynced": true,
+      "xAxisVal": "timestamp",
+      "sidebarDimension": 240,
+      "foxglovePanelTitle": "yaw",
+      "timeWindowMode": "sliding",
+      "followingViewWidth": 5
+    },
+    "RawMessages!35d5n75": {
+      "diffEnabled": false,
+      "diffMethod": "custom",
+      "diffTopicPath": "",
+      "showFullMessageForDiff": false,
+      "topicPath": "/points/detection",
+      "fontSize": 12
+    },
+    "RawMessages!3ut9rga": {
+      "diffEnabled": false,
+      "diffMethod": "custom",
+      "diffTopicPath": "",
+      "showFullMessageForDiff": false,
+      "topicPath": "/points/tracking",
+      "fontSize": 12
+    },
+    "RawMessages!2tdgg50": {
+      "diffEnabled": false,
+      "diffMethod": "custom",
+      "diffTopicPath": "",
+      "showFullMessageForDiff": false,
+      "topicPath": "/points/lidar_target",
+      "fontSize": 12
+    },
+    "RosOut!10lllq3": {
+      "searchTerms": [],
+      "minLogLevel": 2,
+      "preload": true,
+      "nameFilter": {}
+    },
+    "Tab!1vquial": {
+      "activeTabIdx": 0,
+      "tabs": [
+        {
+          "title": "Overview",
+          "layout": {
+            "direction": "column",
+            "first": {
+              "first": {
+                "first": "Plot!1u027tz",
+                "second": "Plot!3zwepjy",
+                "direction": "column"
+              },
+              "second": "SourceInfo!1plh8br",
+              "direction": "row",
+              "splitPercentage": 37.669966127993234
+            },
+            "second": {
+              "first": {
+                "first": "RawMessages!35d5n75",
+                "second": "RawMessages!3ut9rga",
+                "direction": "column"
+              },
+              "second": {
+                "first": "RawMessages!2tdgg50",
+                "second": "RosOut!10lllq3",
+                "direction": "row",
+                "splitPercentage": 20.51282051282051
+              },
+              "direction": "row",
+              "splitPercentage": 20.107033639143733
+            },
+            "splitPercentage": 66.66666666666666
+          }
+        }
+      ]
+    },
+    "SourceInfo!1plh8br": {}
+  },
+  "layout": "Tab!1vquial",
+  "globalVariables": {},
+  "playbackConfig": {
+    "speed": 1
+  },
+  "userNodes": {}
+}

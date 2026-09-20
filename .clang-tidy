@@ -1,0 +1,78 @@
+      
+HeaderFilterRegex: '^(?!.*[/\\]build[/\\]).*$'
+Checks: |
+    readability-identifier-naming,          # 强制命名风格
+    # cppcoreguidelines-avoid-c-arrays,       # 避免 C 风格数组
+    # cppcoreguidelines-avoid-magic-numbers,  # 避免魔法数字
+    cppcoreguidelines-prefer-member-initializer, # 推荐使用成员初始化列表
+    cppcoreguidelines-pro-type-member-init, # 强制初始化成员变量
+    cppcoreguidelines-special-member-functions, # 特殊成员函数
+    google-explicit-constructor,            # 单参数构造函数必须 explicit
+    google-global-names-in-headers,         # 禁止全局命名空间污染
+    modernize-use-auto,                     # 推荐使用 auto
+    modernize-use-override,                 # 强制使用 override
+    modernize-use-equals-default,           # 推荐使用 =default
+    # readability-braces-around-statements,   # 单行语句是否加大括号
+    readability-const-return-type,          # 返回常量类型
+    readability-inconsistent-declaration-parameter-name, # 声明与定义参数名一致
+    # readability-magic-numbers,              # 魔法数字检测
+    readability-redundant-member-init,      # 冗余成员初始化
+    # readability-simplify-boolean-expr,      # 简化布尔表达式
+    cppcoreguidelines-pro-type-cstyle-cast, # 禁止 C 风格强制转换
+    cppcoreguidelines-owning-memory,        # 内存管理安全
+    cppcoreguidelines-avoid-goto,           # 避免 goto 语句
+    cppcoreguidelines-macro-usage,          # 限制宏使用
+    google-build-using-namespace,           # 禁止using namespace
+    cppcoreguidelines-no-malloc,            # 禁止malloc
+    hicpp-no-malloc,                        # 禁止malloc（备用）
+    modernize-use-enum-class,               # 强制使用enum class
+    cppcoreguidelines-init-variables,       # 变量初始化检查
+    cppcoreguidelines-raii,                 # RAII原则检查
+
+# 命名规则配置
+CheckOptions:
+    # 变量名：小写+下划线
+    - key: readability-identifier-naming.VariableCase
+      value: lower_case
+    - key: readability-identifier-naming.LocalVariableCase
+      value: lower_case
+    - key: readability-identifier-naming.MemberCase
+      value: lower_case
+    - key: readability-identifier-naming.GlobalVariableCase
+      value: lower_case
+
+    # 函数名：小写+下划线
+    - key: readability-identifier-naming.FunctionCase
+      value: lower_case
+    - key: readability-identifier-naming.ClassMethodCase
+      value: lower_case
+
+    # 类名：大驼峰
+    - key: readability-identifier-naming.ClassCase
+      value: CamelCase
+    - key: readability-identifier-naming.StructCase
+      value: CamelCase
+
+    # 宏：全大写+下划线
+    - key: readability-identifier-naming.MacroDefinitionCase
+      value: UPPER_CASE
+
+    # 命名空间：大驼峰
+    - key: readability-identifier-naming.NamespaceCase
+      value: CamelCase
+
+    # 类成员变量：m_前缀
+    - key: readability-identifier-naming.MemberSuffix
+      value: ""
+    - key: readability-identifier-naming.MemberPrefix
+      value: m_
+
+    # 允许单行语句不加大括号
+    - key: readability-braces-around-statements.ShortStatementLines
+      value: 0 # 改为0表示允许单行语句不加大括号
+
+    # 禁止C风格强制转换
+    - key: cppcoreguidelines-pro-type-cstyle-cast.AllowedTypes
+      value: ""
+
+    

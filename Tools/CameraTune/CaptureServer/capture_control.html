@@ -1,0 +1,347 @@
+<!doctype html>
+<html lang="zh-CN">
+
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>CaptureServer 控制台</title>
+    <style>
+        :root {
+            color-scheme: light dark;
+            --bg: #0f172a;
+            --card: #111827;
+            --text: #e5e7eb;
+            --muted: #9ca3af;
+            --primary: #22c55e;
+            --primary-2: #16a34a;
+            --border: #374151;
+        }
+
+        * {
+            box-sizing: border-box;
+        }
+
+        body {
+            margin: 0;
+            font-family: system-ui, -apple-system, "Segoe UI", Roboto, "Helvetica Neue", Arial, "Noto Sans", "PingFang SC", "Microsoft YaHei", sans-serif;
+            background: radial-gradient(circle at top, #1f2937, var(--bg));
+            color: var(--text);
+            min-height: 100vh;
+            padding: 24px;
+        }
+
+        .wrap {
+            max-width: 980px;
+            margin: 0 auto;
+            display: grid;
+            gap: 18px;
+        }
+
+        .card {
+            background: color-mix(in srgb, var(--card) 88%, black 12%);
+            border: 1px solid var(--border);
+            border-radius: 14px;
+            padding: 16px;
+        }
+
+        h1 {
+            margin: 0 0 10px;
+            font-size: 24px;
+        }
+
+        .muted {
+            color: var(--muted);
+            font-size: 13px;
+        }
+
+        .row {
+            display: grid;
+            grid-template-columns: 110px 1fr 110px;
+            gap: 10px;
+            align-items: center;
+            margin: 12px 0;
+        }
+
+        input[type="text"],
+        input[type="number"],
+        select {
+            width: 100%;
+            background: #0b1220;
+            color: var(--text);
+            border: 1px solid var(--border);
+            border-radius: 8px;
+            padding: 8px 10px;
+            outline: none;
+        }
+
+        input[type="range"] {
+            width: 100%;
+        }
+
+        .value {
+            text-align: right;
+            font-variant-numeric: tabular-nums;
+            color: #86efac;
+        }
+
+        .buttons {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 10px;
+            margin-top: 10px;
+        }
+
+        button {
+            border: none;
+            border-radius: 10px;
+            padding: 10px 14px;
+            background: var(--primary);
+            color: #06240f;
+            font-weight: 600;
+            cursor: pointer;
+        }
+
+        button:hover {
+            background: var(--primary-2);
+        }
+
+        button.secondary {
+            background: #3b82f6;
+            color: #f8fafc;
+        }
+
+        button.secondary:hover {
+            background: #2563eb;
+        }
+
+        button.ghost {
+            background: #334155;
+            color: #f8fafc;
+        }
+
+        button.ghost:hover {
+            background: #1e293b;
+        }
+
+        .status {
+            margin-top: 10px;
+            min-height: 22px;
+            color: #fcd34d;
+            font-size: 13px;
+            white-space: pre-wrap;
+        }
+
+        .image-box {
+            margin-top: 10px;
+            border: 1px dashed var(--border);
+            border-radius: 12px;
+            overflow: hidden;
+            min-height: 220px;
+            display: grid;
+            place-items: center;
+            background: #020617;
+        }
+
+        .image-box img {
+            max-width: 100%;
+            height: auto;
+            display: block;
+        }
+    </style>
+</head>
+
+<body>
+    <div class="wrap">
+        <div class="card">
+            <h1>CaptureServer 网页控制台</h1>
+            <div class="row">
+                <label for="baseUrl">服务地址</label>
+                <input id="baseUrl" type="text" value="http://127.0.0.1:8080" />
+                <span class="muted">默认本机</span>
+            </div>
+            <div class="muted">按你的要求：拖动划条只改本地值，不会自动发请求；仅点击“同步设置”时提交。</div>
+
+            <div class="row">
+                <label for="exposure">曝光 exposure</label>
+                <input id="exposure" type="range" min="100" max="30000" step="10" value="10000" />
+                <span id="exposureVal" class="value">10000</span>
+            </div>
+
+            <div class="row">
+                <label for="gain">增益 gain</label>
+                <input id="gain" type="range" min="0" max="30" step="0.1" value="8" />
+                <span id="gainVal" class="value">8.0</span>
+            </div>
+
+            <div class="row">
+                <label for="mode">图像模式</label>
+                <select id="mode">
+                    <option value="bayer" selected>Bayer 原始</option>
+                    <option value="rgb">RGB 彩色</option>
+                </select>
+                <span class="muted">仅影响输出</span>
+            </div>
+
+            <div class="buttons">
+                <button id="syncBtn">同步设置</button>
+                <button id="getImageBtn" class="secondary">获取图像</button>
+                <button id="downloadBtn" class="ghost">下载当前图像</button>
+            </div>
+
+            <div class="row">
+                <label for="pollInterval">轮询间隔(秒)</label>
+                <input id="pollInterval" type="number" min="0.1" step="0.1" value="1.0" />
+                <button id="pollBtn" class="secondary">开始轮询</button>
+            </div>
+
+            <div id="status" class="status"></div>
+        </div>
+
+        <div class="card">
+            <div class="muted">当前图像</div>
+            <div class="image-box">
+                <img id="preview" alt="尚未获取图像" />
+            </div>
+        </div>
+    </div>
+
+    <script>
+        const baseUrlInput = document.getElementById('baseUrl');
+        const exposureSlider = document.getElementById('exposure');
+        const gainSlider = document.getElementById('gain');
+        const modeSelect = document.getElementById('mode');
+        const exposureVal = document.getElementById('exposureVal');
+        const gainVal = document.getElementById('gainVal');
+        const syncBtn = document.getElementById('syncBtn');
+        const getImageBtn = document.getElementById('getImageBtn');
+        const downloadBtn = document.getElementById('downloadBtn');
+        const pollIntervalInput = document.getElementById('pollInterval');
+        const pollBtn = document.getElementById('pollBtn');
+        const status = document.getElementById('status');
+        const preview = document.getElementById('preview');
+
+        let lastImageUrl = '';
+        let pollTimer = null;
+
+        function setStatus(message, isError = false) {
+            status.style.color = isError ? '#fca5a5' : '#86efac';
+            status.textContent = message;
+        }
+
+        function getBaseUrl() {
+            return baseUrlInput.value.replace(/\/$/, '');
+        }
+
+        function updateLabels() {
+            exposureVal.textContent = exposureSlider.value;
+            gainVal.textContent = Number(gainSlider.value).toFixed(1);
+        }
+
+        function syncArgs() {
+            const exposure = encodeURIComponent(exposureSlider.value);
+            const gain = encodeURIComponent(gainSlider.value);
+            const mode = encodeURIComponent(modeSelect.value);
+            const url = `${getBaseUrl()}/args?exposure=${exposure}&gain=${gain}&mode=${mode}&_t=${Date.now()}`;
+
+            const ping = new Image();
+            ping.onload = () => setStatus(`参数已提交: exposure=${exposureSlider.value}, gain=${gainSlider.value}, mode=${modeSelect.value}`);
+            ping.onerror = () => setStatus(`请求已发送(跨域环境下浏览器可能不返回状态): ${url}`, false);
+            ping.src = url;
+        }
+
+        function refreshImage() {
+            lastImageUrl = `${getBaseUrl()}/image?_t=${Date.now()}`;
+            preview.src = lastImageUrl;
+            setStatus('已请求最新图像');
+        }
+
+        function getPollIntervalMs() {
+            const seconds = Number(pollIntervalInput.value);
+            if (!Number.isFinite(seconds) || seconds <= 0) {
+                return null;
+            }
+            return Math.max(100, Math.round(seconds * 1000));
+        }
+
+        function stopPolling(showMessage = true) {
+            if (pollTimer !== null) {
+                clearInterval(pollTimer);
+                pollTimer = null;
+            }
+            pollBtn.textContent = '开始轮询';
+            if (showMessage) {
+                setStatus('已停止轮询');
+            }
+        }
+
+        function togglePolling() {
+            if (pollTimer !== null) {
+                stopPolling(true);
+                return;
+            }
+
+            const intervalMs = getPollIntervalMs();
+            if (intervalMs === null) {
+                setStatus('轮询间隔必须是大于 0 的数字（单位秒）', true);
+                return;
+            }
+
+            refreshImage();
+            pollTimer = setInterval(refreshImage, intervalMs);
+            pollBtn.textContent = '停止轮询';
+            setStatus(`已开始轮询，间隔 ${pollIntervalInput.value} 秒`);
+        }
+
+        function downloadCurrentImage() {
+            if (!lastImageUrl) {
+                setStatus('请先点击“获取图像”后再下载', true);
+                return;
+            }
+            const a = document.createElement('a');
+            a.href = lastImageUrl;
+            a.download = `capture_${new Date().toISOString().replace(/[:.]/g, '-')}.jpg`;
+            a.rel = 'noopener';
+            document.body.appendChild(a);
+            a.click();
+            a.remove();
+            setStatus('已触发下载');
+        }
+
+        exposureSlider.addEventListener('input', updateLabels);
+        gainSlider.addEventListener('input', updateLabels);
+
+        syncBtn.addEventListener('click', syncArgs);
+        getImageBtn.addEventListener('click', refreshImage);
+        downloadBtn.addEventListener('click', downloadCurrentImage);
+        pollBtn.addEventListener('click', togglePolling);
+
+        pollIntervalInput.addEventListener('change', () => {
+            if (pollTimer === null) {
+                return;
+            }
+            const intervalMs = getPollIntervalMs();
+            if (intervalMs === null) {
+                stopPolling(false);
+                setStatus('轮询间隔无效，已自动停止轮询', true);
+                return;
+            }
+            clearInterval(pollTimer);
+            pollTimer = setInterval(refreshImage, intervalMs);
+            setStatus(`已更新轮询间隔为 ${pollIntervalInput.value} 秒`);
+        });
+
+        window.addEventListener('beforeunload', () => stopPolling(false));
+
+        preview.addEventListener('error', () => {
+            setStatus('获取图像失败，请确认 CaptureServer 正在运行且地址正确', true);
+        });
+
+        preview.addEventListener('load', () => {
+            setStatus('图像已更新');
+        });
+
+        updateLabels();
+    </script>
+</body>
+
+</html>

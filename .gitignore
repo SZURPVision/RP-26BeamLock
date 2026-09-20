@@ -1,0 +1,36 @@
+# 构建产物
+build/
+cmake-build-*/
+compile_commands.json
+
+# 运行时生成的配置（含标定结果：相机内参、激光光路、引导外参、PID）
+# 仓库只提供 config.example.yaml，实际配置请在运行目录自行生成或复制
+config.yaml
+config.local.yaml
+
+# 日志与录制
+mcaps/
+*.mcap
+*.mp4
+*.avi
+logs/
+*.log
+
+# 标定与采集数据
+CalibrationData/
+CalibrationDataNoisy/
+CalibrationDataNoisy500/
+CapturedFrames/
+encoder_angles.txt
+GuideTransform.yaml
+GuideTransform.txt
+points.txt
+angles.txt
+distance.txt
+LazerCalibration*/
+
+# 编辑器与系统文件
+.vscode/
+.idea/
+*.swp
+.DS_Store

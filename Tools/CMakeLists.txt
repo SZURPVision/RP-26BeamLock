@@ -1,0 +1,8 @@
+add_subdirectory(CameraTune)
+add_subdirectory(DetectTest)
+add_subdirectory(GimbalControllerTest)
+add_subdirectory(LidarGuideCalibration)
+add_subdirectory(LazerCalibration)
+add_subdirectory(NetworkTest)
+add_subdirectory(SerialTest)
+add_subdirectory(Export)

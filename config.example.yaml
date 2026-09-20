@@ -1,0 +1,91 @@
+# RP-26BeamLock 示例配置
+#
+# 用法：复制到运行目录并改名为 config.yaml（程序启动时若找不到 config.yaml 会自动生成同样的默认配置）。
+# 参数含义与单位见 CONFIG.md；标定流程见 docs/calibration.md。
+#
+# ⚠️ 本文件中的相机内参与标定值均为占位值，实车使用前必须重新标定。
+
+CameraConfig:
+  # 3x3 相机内参矩阵（行优先），由 Tools/CameraTune 标定得到
+  intrinsic_matrix: [16000.0, 0.0, 790.0, 0.0, 16000.0, 580.0, 0.0, 0.0, 1.0]
+  # 畸变系数 (k1, k2, p1, p2, k3)
+  distortion_coeffs: [0.097, -24.0, 0.0084, -0.0010, -0.18]
+  image_width: 1440
+  image_height: 1080
+  gain: 16.0      # 相机增益
+  exposure: 400.0 # 曝光时间（相机内部单位，微秒）
+
+TripodHeadConfig:
+  # 激光光路在相机坐标系中的直线方程 x = x_k * z + x_b, y = y_k * z + y_b
+  # 由 Tools/LazerCalibration 标定得到；默认 0 表示“假设激光与光轴重合”
+  x_k: 0.0
+  x_b: 0.0
+  y_k: 0.0
+  y_b: 0.0
+  # 方向约定（与云台/电控的装配方向有关，接反时把对应项取反即可）
+  invert_yaw_angle: false
+  invert_pitch_angle: true
+  invert_yaw_encoder: true
+  invert_pitch_encoder: false
+  # 编码器每圈计数
+  yaw_encoder_per_round: 8192
+  pitch_encoder_per_round: 8192
+  # 运动限制与角度护栏（相对初始角，超过则停止下发指令并转入扫描）
+  max_acceleration: 200.0 # deg/s^2
+  max_velocity: 400.0     # deg/s
+  max_pitch_angle: 20.0   # deg
+  max_yaw_angle: 80.0     # deg
+
+ServoConfig:
+  # 视觉伺服 PID 与前馈
+  k_p: 500
+  k_i: 0.0
+  k_d: 0.0
+  k_ff: 0.0
+  integral_limit: 0.4
+  integrate_deadzone: 0.005
+  min_offset: 0.0005
+  # 未命中时的同心圆扫描（像素）：半径从 initial 以 delta 递增到 max，速度为 pixel/s
+  scan_initial_radius: 4.0
+  scan_radius_delta: 4.0
+  scan_max_radius: 16.0
+  scan_speed: 20.0
+
+TrackStrategyConfig:
+  reset_time_threshold: 5.0 # s，丢失多久后进入扫描
+  # 方形扫描（以网络给出的位置为中心）
+  scan_yaw_angle: 3.0   # deg
+  scan_pitch_angle: 3.0 # deg
+  scan_period: 4.0      # s
+  # 逐行扫描（绝对角度）
+  line_scan_yaw_min: 5.0
+  line_scan_yaw_max: 25.0
+  line_scan_pitch_min: -15.0
+  line_scan_pitch_max: 0.0
+  line_scan_speed: 20.0     # deg/s
+  line_scan_pitch_step: 1.5 # deg
+  # 雷达坐标系 → 云台坐标系的变换（平移 + ZYX 欧拉角），由 Tools/LidarGuideCalibration 标定
+  guide_translation: [0.0, 0.0, 0.0]
+  guide_rotation_euler_zyx_deg: [0.0, 0.0, 0.0]
+
+DetectConfig:
+  light_blob_x_threshold: 20.0
+  light_blob_y_threshold: 5.0
+  min_hit_difference: 10.0
+  adaptive_threshold_c: -10.0
+
+SerialConfig:
+  buffer_size: 1024
+  prepare_size: 512
+  baud_rate: 115200
+  reset_pack_count: 8192
+  port_name: /dev/ttyACM0
+  max_send_frequency: 1000.0
+
+NetworkConfig:
+  # 监听雷达主程序发来的目标位置；0.0.0.0 表示监听所有网卡
+  listen_ip: 0.0.0.0
+  listen_port: 9000
+  # 心跳发送目标（雷达主程序）地址，按实际部署修改
+  send_target_ip: 127.0.0.1
+  send_target_port: 9001

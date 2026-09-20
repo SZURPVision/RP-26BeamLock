@@ -1,0 +1,62 @@
+# 最大行宽设置为 250
+ColumnLimit: 250
+      
+# 基于 LLVM 样式，但进行自定义调整
+BasedOnStyle: LLVM
+
+# 缩进使用 4 个空格
+IndentWidth: 4
+
+# 命名空间内容不缩进
+NamespaceIndentation: None
+
+# 类、结构体、枚举、命名空间等内容缩进
+AccessModifierOffset: -4
+
+# 大括号换行风格：Allman 风格（左大括号换行）
+BreakBeforeBraces: Allman
+
+# Lambda 表达式：左大括号不换行
+BraceWrapping:
+    AfterFunction: true # 函数后大括号换行
+    AfterClass: true # 类后大括号换行
+    AfterNamespace: true # 命名空间后大括号换行
+    BeforeLambdaBody: false # Lambda 体前不换行
+
+# 函数参数列表过长时换行，每行一个参数
+AllowAllParametersOfDeclarationOnNextLine: false
+BinPackParameters: false
+
+# 函数调用参数列表过长时换行
+BinPackArguments: false
+
+# 构造函数初始化列表换行，每行一个
+BreakConstructorInitializers: BeforeComma
+ConstructorInitializerAllOnOneLineOrOnePerLine: true
+
+# 空行控制：最多连续空行数为 2
+MaxEmptyLinesToKeep: 2
+
+# 头文件分组：不同组之间空行
+IncludeBlocks: Regroup
+
+# 命名风格：小写 + 下划线（变量、函数、命名空间）
+VariableCase: lower_case
+FunctionCase: lower_case
+NamespaceCase: lower_case
+
+# 类名使用大驼峰
+ClassCase: CamelCase
+
+# 宏定义全大写
+MacroDefinitionCase: UPPER_CASE
+
+# 指针和引用符号靠近类型
+PointerAlignment: Left
+
+Standard: Cpp11
+
+# 在构造函数初始化列表的冒号后缩进
+ConstructorInitializerIndentWidth: 4
+
+    

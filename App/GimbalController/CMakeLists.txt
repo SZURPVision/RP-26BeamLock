@@ -1,0 +1,3 @@
+add_library(GimbalController SHARED src/GimbalController.cpp)
+target_include_directories(GimbalController PUBLIC include)
+target_link_libraries(GimbalController PUBLIC Core foxglove_cpp Serial)

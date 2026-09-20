@@ -1,0 +1,27 @@
+cmake_minimum_required(VERSION 3.10)
+set(CMAKE_CXX_STANDARD 20)
+set(CMAKE_CXX_STANDARD_REQUIRED ON)
+set(CMAKE_CXX_EXTENSIONS OFF)
+set(CMAKE_EXPORT_COMPILE_COMMANDS ON)
+if(NOT CMAKE_BUILD_TYPE)
+    set(CMAKE_BUILD_TYPE Release CACHE STRING "Build type (Debug/Release/RelWithDebInfo/MinSizeRel)" FORCE)
+endif()
+project(26BeamLock CXX)
+
+option(CV_SHOW "Enable OpenCV display" OFF)
+
+if(CV_SHOW)
+    add_definitions(-DCV_SHOW)
+    message(STATUS "OpenCV display enabled")
+endif()
+
+find_package(OpenCV REQUIRED)
+find_package(Eigen3 REQUIRED)
+find_package(yaml-cpp REQUIRED)
+
+add_subdirectory(Core)
+add_subdirectory(FoxGlove)
+add_subdirectory(Detect)
+add_subdirectory(Communication)
+add_subdirectory(App)
+add_subdirectory(Tools)
