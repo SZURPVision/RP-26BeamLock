@@ -228,10 +228,6 @@ sudo systemctl start|stop|restart|status autostart.service
 
 见 [`docs/PROTOCOL.md`](docs/PROTOCOL.md)：UDP 目标位置包、心跳包、串口收发帧与 CRC 参数。
 
-## 许可证与致谢
-
-本项目采用 [MIT 许可证](LICENSE)。第三方依赖及其许可证见 [`THIRD_PARTY_NOTICES.md`](THIRD_PARTY_NOTICES.md)。
-
 ## 应急处理
 
 整套方案对标定精度要求不高。比赛中若发现异常（如相机对焦环松动、激光照不到），按以下顺序排查：
